@@ -294,9 +294,20 @@ class _CameraWidgetBuilder extends State<CameraAwesomeBuilder>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
+      case AppLifecycleState.paused:        
         break;
       case AppLifecycleState.inactive:
-      case AppLifecycleState.paused:
+        final currentCapture = cameraContext.mediaCaptureController.value
+        if(currentCapture != null && currentCapture.isVideo && currentCapture.status == MediaCaptureStatus.capturing) {
+          _cameraContext.state.when(
+            onVideoRecordingMode: (mode) => mode.pauseRecording(currentCapture),
+          );
+        }
+        else {
+          _cameraContext.state
+            .when(onVideoRecordingMode: (mode) => mode.stopRecording());
+        }
+        break;
       case AppLifecycleState.detached:
         _cameraContext.state
             .when(onVideoRecordingMode: (mode) => mode.stopRecording());
