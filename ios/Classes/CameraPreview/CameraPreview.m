@@ -15,6 +15,7 @@
                         streamImages:(BOOL)streamImages
                    mirrorFrontCamera:(BOOL)mirrorFrontCamera
                      aspectRatioMode:(AspectRatio)aspectRatioMode
+                           flashMode:(CameraFlashMode)flashMode
                          captureMode:(CaptureModes)captureMode
                           completion:(nonnull void (^)(NSNumber * _Nullable, FlutterError * _Nullable))completion
                        dispatchQueue:(dispatch_queue_t)dispatchQueue {
@@ -41,9 +42,28 @@
   
   _captureMode = captureMode;
   
-  // By default enable auto flash mode
-  _flashMode = AVCaptureFlashModeOff;
-  _torchMode = AVCaptureTorchModeOff;
+  switch (flashMode) {
+    case None:
+      _torchMode = AVCaptureTorchModeOff;
+      _flashMode = AVCaptureFlashModeOff;
+      break;
+    case On:
+      _torchMode = AVCaptureTorchModeOff;
+      _flashMode = AVCaptureFlashModeOn;
+      break;
+    case Auto:
+      _torchMode = AVCaptureTorchModeAuto;
+      _flashMode = AVCaptureFlashModeAuto;
+      break;
+    case Always:
+      _torchMode = AVCaptureTorchModeOn;
+      _flashMode = AVCaptureFlashModeOn;
+      break;
+    default:
+      _torchMode = AVCaptureTorchModeAuto;
+      _flashMode = AVCaptureFlashModeAuto;
+      break;
+  }
   
   _previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:_captureSession];
   _previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;

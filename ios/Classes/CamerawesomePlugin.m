@@ -269,10 +269,25 @@ FlutterEventSink imageStreamEventSink;
   AspectRatio aspectRatioMode = [self convertAspectRatio:aspectRatio];
   CaptureModes captureModeType = ([captureMode isEqualToString:@"PHOTO"]) ? Photo : Video;
   CameraSensor cameraSensor = ([sensor isEqualToString:@"FRONT"]) ? Front : Back;
+
+  CameraFlashMode flash;
+  if ([flashMode isEqualToString:@"NONE"]) {
+    flash = None;
+  } else if ([flashMode isEqualToString:@"ON"]) {
+    flash = On;
+  } else if ([flashMode isEqualToString:@"AUTO"]) {
+    flash = Auto;
+  } else if ([flashMode isEqualToString:@"ALWAYS"]) {
+    flash = Always;
+  } else {
+    flash = None;
+  }
+
   self.camera = [[CameraPreview alloc] initWithCameraSensor:cameraSensor
                                                streamImages:[enableImageStream boolValue]
                                           mirrorFrontCamera:[mirrorFrontCamera boolValue]
                                             aspectRatioMode:aspectRatioMode
+                                                  flashMode:flash
                                                 captureMode:captureModeType
                                                  completion:completion
                                               dispatchQueue:dispatch_queue_create("camerawesome.dispatchqueue", NULL)];

@@ -24,6 +24,9 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
 
 /// Start recording video at given path
 - (void)recordVideoAtPath:(NSString *)path orientation:(NSInteger)orientation audioSetupCallback:(OnAudioSetup)audioSetupCallback videoWriterCallback:(OnVideoWriterSetup)videoWriterCallback options:(VideoOptions *)options completion:(nonnull void (^)(FlutterError * _Nullable))completion {
+  
+  _orientation = orientation;
+  
   // Create audio & video writer
   if (![self setupWriterForPath:path audioSetupCallback:audioSetupCallback options:options completion:completion]) {
     completion([FlutterError errorWithCode:@"VIDEO_ERROR" message:@"impossible to write video at path" details:path]);
@@ -37,7 +40,6 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
   _audioTimeOffset = CMTimeMake(0, 1);
   _videoIsDisconnected = NO;
   _audioIsDisconnected = NO;
-  _orientation = orientation;
 }
 
 /// Stop recording video
@@ -137,12 +139,12 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
 - (CGAffineTransform)getVideoOrientation {
   CGAffineTransform transform;
   
-  switch ([[UIDevice currentDevice] orientation]) {
+  switch (_orientation) {
     case UIDeviceOrientationLandscapeLeft:
-      transform = CGAffineTransformMakeRotation(-M_PI_2);
+      transform = CGAffineTransformMakeRotation(M_PI_2);
       break;
     case UIDeviceOrientationLandscapeRight:
-      transform = CGAffineTransformMakeRotation(M_PI_2);
+      transform = CGAffineTransformMakeRotation(-M_PI_2);
       break;
     case UIDeviceOrientationPortraitUpsideDown:
       transform = CGAffineTransformMakeRotation(M_PI);
