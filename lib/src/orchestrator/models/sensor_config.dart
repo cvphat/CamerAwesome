@@ -56,7 +56,7 @@ class SensorConfig {
 
     /// Zoom must be between 0.0 (no zoom) and 1.0 (max zoom)
     double currentZoom = 0.0,
-    List<FlashMode> flashAllows = const [FlashMode.none,FlashMode.on,FlashMode.auto,FlashMode.always],
+    List<FlashMode> flashAllows = const [],
   }) {
     _flashModeController = BehaviorSubject<FlashMode>.seeded(flash);
     flashMode$ = _flashModeController.stream;
@@ -116,19 +116,34 @@ class SensorConfig {
 
   /// Switch the flash according to the previous state
   void switchCameraFlash() {
-    if(flashAllows.isEmpty) {
-      return;
-    }
-
     final FlashMode newFlashMode;
-    var index = flashAllows.indexWhere((f) => f == flashMode);
-    if(index == flashAllows.length - 1){
-      index = 0;
+
+    if(flashAllows.isEmpty) {
+      switch (flashMode) {
+        case FlashMode.none:
+          newFlashMode = FlashMode.auto;
+          break;
+        case FlashMode.on:
+          newFlashMode = FlashMode.always;
+          break;
+        case FlashMode.auto:
+          newFlashMode = FlashMode.on;
+          break;
+        case FlashMode.always:
+          newFlashMode = FlashMode.none;
+          break;
     }
     else {
-      index += 1;
+      var index = flashAllows.indexWhere((f) => f == flashMode);
+      if(index == flashAllows.length - 1){
+        index = 0;
+      }
+      else {
+        index += 1;
+      }
+      newFlashMode = flashAllows.elementAt(index);
     }
-    newFlashMode = flashAllows.elementAt(index);
+
     setFlashMode(newFlashMode);
   }
 
