@@ -64,10 +64,6 @@
       _flashMode = AVCaptureFlashModeAuto;
       break;
   }
-
-  //Default flash mode
-  [_captureDevice setTorchMode:_torchMode];
-  [_captureDevice unlockForConfiguration];
   
   _previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:_captureSession];
   _previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
@@ -472,6 +468,14 @@
   }
   
   if (!_videoController.isRecording) {
+    NSError *lockError;
+    [_captureDevice lockForConfiguration:&lockError];
+    if ([_captureDevice hasFlash] && _cameraSensor != Front && lockError == nil) {
+      [_captureDevice setTorchMode:_torchMode];
+      [_captureDevice unlockForConfiguration];
+    }
+    
+
     [_videoController recordVideoAtPath:path orientation:_motionController.deviceOrientation audioSetupCallback:^{
       [self setUpCaptureSessionForAudioError:^(NSError *error) {
         completion([FlutterError errorWithCode:@"VIDEO_ERROR" message:@"error when trying to setup audio" details:[error localizedDescription]]);
