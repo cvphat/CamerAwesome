@@ -50,6 +50,8 @@ class CameraAwesomeBuilder extends StatefulWidget {
 
   final FlashMode flashMode;
 
+  final List<FlashMode> flashAllows,
+
   final bool mirrorFrontCamera;
 
   /// Must be a value between 0.0 (no zoom) and 1.0 (max zoom)
@@ -124,6 +126,7 @@ class CameraAwesomeBuilder extends StatefulWidget {
     required this.builder,
     required this.previewFit,
     required this.filter,
+    this.flashAllows = const [],
     this.onImageForAnalysis,
     this.imageAnalysisConfig,
     this.onPreviewTapBuilder,
@@ -161,6 +164,7 @@ class CameraAwesomeBuilder extends StatefulWidget {
   CameraAwesomeBuilder.awesome({
     Sensors sensor = Sensors.back,
     FlashMode flashMode = FlashMode.none,
+    List<FlashMode> flashAllows = const [],
     double zoom = 0.0,
     bool mirrorFrontCamera = false,
     CameraAspectRatios aspectRatio = CameraAspectRatios.ratio_4_3,
@@ -185,6 +189,7 @@ class CameraAwesomeBuilder extends StatefulWidget {
   }) : this._(
           sensor: sensor,
           flashMode: flashMode,
+          flashAllows: flashAllows,
           zoom: zoom,
           mirrorFrontCamera: mirrorFrontCamera,
           aspectRatio: aspectRatio,
@@ -220,6 +225,7 @@ class CameraAwesomeBuilder extends StatefulWidget {
   CameraAwesomeBuilder.custom({
     Sensors sensor = Sensors.back,
     FlashMode flashMode = FlashMode.none,
+    List<FlashMode> flashAllows = const [],
     double zoom = 0.0,
     bool mirrorFrontCamera = false,
     CameraAspectRatios aspectRatio = CameraAspectRatios.ratio_4_3,
@@ -240,6 +246,7 @@ class CameraAwesomeBuilder extends StatefulWidget {
   }) : this._(
           sensor: sensor,
           flashMode: flashMode,
+          flashAllows: flashAllows,
           zoom: zoom,
           mirrorFrontCamera: mirrorFrontCamera,
           aspectRatio: aspectRatio,
@@ -325,6 +332,7 @@ class _CameraWidgetBuilder extends State<CameraAwesomeBuilder>
       SensorConfig(
         sensor: widget.sensor,
         flash: widget.flashMode,
+        flashAllows: widget.flashAllows,
         currentZoom: widget.zoom,
         mirrorFrontCamera: widget.mirrorFrontCamera,
         aspectRatio: widget.aspectRatio,
