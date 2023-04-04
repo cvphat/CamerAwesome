@@ -62,6 +62,7 @@ AVCaptureAudioDataOutputSampleBufferDelegate>
                         streamImages:(BOOL)streamImages
                    mirrorFrontCamera:(BOOL)mirrorFrontCamera
                      aspectRatioMode:(AspectRatio)aspectRatioMode
+                           flashMode:(CameraFlashMode)flashMode
                          captureMode:(CaptureModes)captureMode
                           completion:(nonnull void (^)(NSNumber * _Nullable, FlutterError * _Nullable))completion
                        dispatchQueue:(dispatch_queue_t)dispatchQueue;

@@ -44,6 +44,8 @@ class SensorConfig {
       BehaviorSubject<double>();
   StreamSubscription? _brightnessSubscription;
 
+  late final List<FlashMode> flashAllows;
+
   SensorConfig({
     required this.sensor,
     FlashMode flash = FlashMode.none,
@@ -54,6 +56,7 @@ class SensorConfig {
 
     /// Zoom must be between 0.0 (no zoom) and 1.0 (max zoom)
     double currentZoom = 0.0,
+    List<FlashMode> flashAllows = const [FlashMode.none,FlashMode.on,FlashMode.auto,FlashMode.always],
   }) {
     _flashModeController = BehaviorSubject<FlashMode>.seeded(flash);
     flashMode$ = _flashModeController.stream;
@@ -74,6 +77,8 @@ class SensorConfig {
     _brightnessSubscription = _brightnessController.stream
         .debounceTime(const Duration(milliseconds: 500))
         .listen((value) => CamerawesomePlugin.setBrightness(value));
+
+    this.flashAllows = flashAllows.toSet().toList();
   }
 
   Future<void> setZoom(double zoom) async {
@@ -111,21 +116,19 @@ class SensorConfig {
 
   /// Switch the flash according to the previous state
   void switchCameraFlash() {
-    final FlashMode newFlashMode;
-    switch (flashMode) {
-      case FlashMode.none:
-        newFlashMode = FlashMode.auto;
-        break;
-      case FlashMode.on:
-        newFlashMode = FlashMode.always;
-        break;
-      case FlashMode.auto:
-        newFlashMode = FlashMode.on;
-        break;
-      case FlashMode.always:
-        newFlashMode = FlashMode.none;
-        break;
+    if(flashAllows.isEmpty) {
+      return;
     }
+
+    final FlashMode newFlashMode;
+    var index = flashAllows.indexWhere((f) => f == flashMode);
+    if(index == flashAllows.length - 1){
+      index = 0;
+    }
+    else {
+      index += 1;
+    }
+    newFlashMode = flashAllows.elementAt(index);
     setFlashMode(newFlashMode);
   }
 

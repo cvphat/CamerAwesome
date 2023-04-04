@@ -297,7 +297,7 @@ class _CameraWidgetBuilder extends State<CameraAwesomeBuilder>
       case AppLifecycleState.paused:        
         break;
       case AppLifecycleState.inactive:
-        final currentCapture = cameraContext.mediaCaptureController.value
+        final currentCapture = _cameraContext.mediaCaptureController.value;
         if(currentCapture != null && currentCapture.isVideo && currentCapture.status == MediaCaptureStatus.capturing) {
           _cameraContext.state.when(
             onVideoRecordingMode: (mode) => mode.pauseRecording(currentCapture),

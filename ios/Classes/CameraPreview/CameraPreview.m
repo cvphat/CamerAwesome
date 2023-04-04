@@ -64,6 +64,10 @@
       _flashMode = AVCaptureFlashModeAuto;
       break;
   }
+
+  //Default flash mode
+  [_captureDevice setTorchMode:_torchMode];
+  [_captureDevice unlockForConfiguration];
   
   _previewLayer = [AVCaptureVideoPreviewLayer layerWithSession:_captureSession];
   _previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
@@ -154,6 +158,7 @@
   [_captureConnection setAutomaticallyAdjustsVideoMirroring:NO];
   [_captureConnection setVideoMirrored:(_cameraSensor == Front)];
   [_captureConnection setVideoOrientation:AVCaptureVideoOrientationPortrait];
+
 }
 
 - (void)dealloc {
