@@ -132,6 +132,7 @@ class SensorConfig {
         case FlashMode.always:
           newFlashMode = FlashMode.none;
           break;
+      }
     }
     else {
       var index = flashAllows.indexWhere((f) => f == flashMode);
