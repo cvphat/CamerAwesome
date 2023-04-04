@@ -50,7 +50,7 @@ class CameraAwesomeBuilder extends StatefulWidget {
 
   final FlashMode flashMode;
 
-  final List<FlashMode> flashAllows,
+  final List<FlashMode> flashAllows;
 
   final bool mirrorFrontCamera;
 
